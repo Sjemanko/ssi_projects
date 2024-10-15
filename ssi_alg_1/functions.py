@@ -38,3 +38,8 @@ def find_random_middles(number_of_groups: int, data: dict) -> dict:
     for i in range(number_of_groups):
         random_middles.update({i: list(data.get(random.choice(list(data.keys()))))})
     return random_middles
+
+def get_defined_middles(data: dict) -> dict:
+    defined_middles = {}
+    defined_middles.update({0: data.get(0), 1: data.get(1), 2: data.get(2)})
+    return defined_middles

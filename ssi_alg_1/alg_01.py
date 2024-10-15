@@ -3,30 +3,38 @@ import matplotlib.pyplot as plt
 import matplotlib.markers as markers
 
 from functions import read_data, euclidean_distance, find_random_middles
+from ssi_alg_1.functions import get_defined_middles
 
-x_values = []
-y_values = []
-
-x_middle_values = []
-y_middle_values = []
-
-groups = 1
-iterations = 100
-
-group_indexes = []
-split_groups = []
-
-
-points_values = read_data('data.txt')
 marker = markers.MarkerStyle(marker='s', fillstyle='none')
 
+# flag for break loop after find middle points copy (when middle_points cords are the same, loops break)
+optimized = True
+
+groups = 4
+
+# colors defined for groups
+colors = ['red', 'green', 'yellow', 'purple']
+
+iterations = 100
+
+# memory
+prev_middles = {}
+
+points_values = read_data('data.txt')
+
+# random middles cords
 middles_groups = find_random_middles(groups, points_values)
 
-for point_values in points_values.values():
-    x_values.append(point_values[0])
-    y_values.append(point_values[1])
+# defined middles cords
+# middles_groups = get_defined_middles(points_values)
+
+x_values, y_values = zip(*points_values.values())
+
+x_values = list(x_values)
+y_values = list(y_values)
 
 for i in range(iterations):
+    group_indexes = []
     for s, point in enumerate(points_values.values()):
         distances = []
         for middle_idx, middle in enumerate(middles_groups.values()):
@@ -51,12 +59,24 @@ for i in range(iterations):
 
         middles_groups.update({j: [xpos, ypos]})
 
-    for middle_values in middles_groups.values():
-        x_middle_values.append(middle_values[0])
-        y_middle_values.append(middle_values[1])
+    if optimized:
+        if prev_middles.get(0) == middles_groups.get(0) and prev_middles.get(1) == middles_groups.get(
+                1) and prev_middles.get(2) == middles_groups.get(2):
+            break
+        else:
+            prev_middles = middles_groups.copy()
 
-    plt.scatter(x_values, y_values, marker=marker)
+    x_middle_values, y_middle_values = zip(*middles_groups.values())
+
+    x_middle_values = list(x_middle_values)
+    y_middle_values = list(y_middle_values)
+
+    for s, (x, y) in enumerate(zip(x_values, y_values)):
+        group_idx = next(group[1] for group in group_indexes if group[0] == s)
+        plt.scatter(x, y, color=colors[group_idx], marker=marker)
+
+    print(i, middles_groups)
+    # plt.scatter(x_values, y_values, marker=marker)
     plt.scatter(x_middle_values, y_middle_values, marker='o')
     plt.show()
 
-    print(middles_groups)
