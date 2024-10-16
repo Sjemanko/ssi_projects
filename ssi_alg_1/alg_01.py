@@ -1,19 +1,21 @@
-import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.markers as markers
+matplotlib.use('TkAgg')
 
 from functions import read_data, euclidean_distance, find_random_middles
-from ssi_alg_1.functions import get_defined_middles
+
+# from ssi_alg_1.functions import get_defined_middles
 
 marker = markers.MarkerStyle(marker='s', fillstyle='none')
 
 # flag for break loop after find middle points copy (when middle_points cords are the same, loops break)
 optimized = True
 
-groups = 4
+groups = 3
 
 # colors defined for groups
-colors = ['red', 'green', 'yellow', 'purple']
+colors = ['red', 'green', 'orange']
 
 iterations = 100
 
@@ -32,6 +34,13 @@ x_values, y_values = zip(*points_values.values())
 
 x_values = list(x_values)
 y_values = list(y_values)
+
+x_middles, y_middles = zip(*middles_groups.values())
+plt.subplot(3, 4, 1)
+
+plt.scatter(x_values, y_values, marker=marker)
+plt.scatter(x_middles, y_middles, marker='o')
+# plt.show()
 
 for i in range(iterations):
     group_indexes = []
@@ -71,6 +80,11 @@ for i in range(iterations):
     x_middle_values = list(x_middle_values)
     y_middle_values = list(y_middle_values)
 
+    # creating separated plots
+
+    # plt.figure(i)
+    plt.subplot(3, 4, i + 1) # ???
+
     for s, (x, y) in enumerate(zip(x_values, y_values)):
         group_idx = next(group[1] for group in group_indexes if group[0] == s)
         plt.scatter(x, y, color=colors[group_idx], marker=marker)
@@ -78,5 +92,5 @@ for i in range(iterations):
     print(i, middles_groups)
     # plt.scatter(x_values, y_values, marker=marker)
     plt.scatter(x_middle_values, y_middle_values, marker='o')
-    plt.show()
 
+plt.show()
