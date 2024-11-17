@@ -1,4 +1,0 @@
-// to run install script - pip install -r /path/to/requirements.txt
-
-numpy==24.2
-matplotlib==24.2
