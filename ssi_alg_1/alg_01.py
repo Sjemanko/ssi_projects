@@ -1,55 +1,41 @@
-import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.markers as markers
-matplotlib.use('TkAgg')
+import numpy as np
 
-from functions import read_data, euclidean_distance, find_random_middles
-
-# from ssi_alg_1.functions import get_defined_middles
+from ssi_alg_1.Euclidean import Euclidean
+from ssi_alg_1.Manhattan import Manhattan
+from ssi_alg_1.Alg_class import Algorithm
 
 marker = markers.MarkerStyle(marker='s', fillstyle='none')
+iterations = 40
+
+# colors defined for groups
+groups = 3
+colors = ['red', 'green', 'yellow']
 
 # flag for break loop after find middle points copy (when middle_points cords are the same, loops break)
 optimized = True
 
-groups = 3
+Alg_obj = Algorithm('data.txt', Euclidean())
 
-# colors defined for groups
-colors = ['red', 'green', 'orange']
+points_positions = Alg_obj.data
 
-iterations = 100
+middles_groups = Alg_obj.find_random_middle_points(groups)
+print(middles_groups)
+
+# middles_groups = Alg_obj.get_defined_middle_points()
 
 # memory
 prev_middles = {}
 
-points_values = read_data('data.txt')
-
-# random middles cords
-middles_groups = find_random_middles(groups, points_values)
-
-# defined middles cords
-# middles_groups = get_defined_middles(points_values)
-
-x_values, y_values = zip(*points_values.values())
-
-x_values = list(x_values)
-y_values = list(y_values)
-
-x_middles, y_middles = zip(*middles_groups.values())
-plt.subplot(3, 4, 1)
-
-plt.scatter(x_values, y_values, marker=marker)
-plt.scatter(x_middles, y_middles, marker='o')
-# plt.show()
+x_values, y_values = zip(*points_positions.values())
 
 for i in range(iterations):
     group_indexes = []
-    for s, point in enumerate(points_values.values()):
-        distances = []
-        for middle_idx, middle in enumerate(middles_groups.values()):
-            distances.append(euclidean_distance(point, middle))
-        closest_group_idx = distances.index(min(distances))
-        group_indexes.append([s, closest_group_idx])
+    for s, point in enumerate(points_positions.values()):
+        distances = [Alg_obj.count_distance_method_strategy.count_distance(point, middle) for middle in middles_groups.values()]
+        closest_group_idx = np.argmin(distances)
+        group_indexes.append((s, closest_group_idx))
 
     for j, group_point_values in enumerate(middles_groups.values()):
         temp = []
@@ -61,8 +47,8 @@ for i in range(iterations):
         if len(temp) == 0:
             break
         for el in temp:
-            xpos += points_values.get(el)[0]
-            ypos += points_values.get(el)[1]
+            xpos += points_positions.get(el)[0]
+            ypos += points_positions.get(el)[1]
         xpos /= len(temp)
         ypos /= len(temp)
 
@@ -80,17 +66,12 @@ for i in range(iterations):
     x_middle_values = list(x_middle_values)
     y_middle_values = list(y_middle_values)
 
-    # creating separated plots
-
-    # plt.figure(i)
-    plt.subplot(3, 4, i + 1) # ???
-
     for s, (x, y) in enumerate(zip(x_values, y_values)):
         group_idx = next(group[1] for group in group_indexes if group[0] == s)
         plt.scatter(x, y, color=colors[group_idx], marker=marker)
 
-    print(i, middles_groups)
+    # print(i, middles_groups)
     # plt.scatter(x_values, y_values, marker=marker)
     plt.scatter(x_middle_values, y_middle_values, marker='o')
+    plt.show()
 
-plt.show()
