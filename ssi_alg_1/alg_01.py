@@ -35,15 +35,17 @@ def main(iterations, groups, colors, Alg_strat, mode='means'):
         groups_y_values = {i:[] for i in range(groups)}
 
         # plotting and printing data
-        for s_index, (x, y) in enumerate(points_positions.values()):
-            # choosing group index from group point values [index, group_index] and save it to group_idx
-            group_idx = next(group[1] for group in group_points if group[0] == s_index)
-            group_points_number[group_idx] += 1
+        # ???
+        if i == 0 or i == 3 or i == 9:
+            for s_index, (x, y) in enumerate(points_positions.values()):
+                # choosing group index from group point values [index, group_index] and save it to group_idx
+                group_idx = next(group[1] for group in group_points if group[0] == s_index)
+                group_points_number[group_idx] += 1
 
-            groups_x_values.get(group_idx).append(x)
-            groups_y_values.get(group_idx).append(y)
+                groups_x_values.get(group_idx).append(x)
+                groups_y_values.get(group_idx).append(y)
 
-            plt.scatter(x, y, color=colors[group_idx], marker=marker)
+                plt.scatter(x, y, color=colors[group_idx], marker=marker)
 
         # iterations
         if i == 0 or i == 3 or i == 9:
