@@ -35,7 +35,6 @@ def main(iterations, groups, colors, Alg_strat, mode='means'):
         groups_y_values = {i:[] for i in range(groups)}
 
         # plotting and printing data
-        # ???
         if i == 0 or i == 3 or i == 9:
             for s_index, (x, y) in enumerate(points_positions.values()):
                 # choosing group index from group point values [index, group_index] and save it to group_idx
@@ -48,8 +47,6 @@ def main(iterations, groups, colors, Alg_strat, mode='means'):
                 plt.scatter(x, y, color=colors[group_idx], marker=marker)
 
         # iterations
-        if i == 0 or i == 3 or i == 9:
-
             print(f'\niterations: {i + 1}\n')
             for j, point in enumerate(middles_points.values()):
                 print(f'middle point {j+1}: [{round(point[0], 4)}; {round(point[1], 4)}]:'

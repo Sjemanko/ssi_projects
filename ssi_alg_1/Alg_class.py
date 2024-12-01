@@ -102,7 +102,7 @@ class Algorithm:
 
     def return_closest_point_to_middle(self, middles_points, group_points, points_positions):
         """
-        Method for fining the closest points to counted middles point
+        Method for finding the closest points to counted middle points
         :param middles_points: dict[int, list[float(x), float(y)]
         :param group_points: list[tuple[int, int]
         :param points_positions: dict[int, list[float(x), float(y)]
