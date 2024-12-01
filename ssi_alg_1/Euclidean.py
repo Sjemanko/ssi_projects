@@ -1,4 +1,4 @@
-from ssi_alg_1.Strategy import Strategy
+from Strategy import Strategy
 import math
 
 class Euclidean(Strategy):

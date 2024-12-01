@@ -1,77 +1,58 @@
 import matplotlib.pyplot as plt
 import matplotlib.markers as markers
-import numpy as np
+from Alg_class import Algorithm
 
-from ssi_alg_1.Euclidean import Euclidean
-from ssi_alg_1.Manhattan import Manhattan
-from ssi_alg_1.Alg_class import Algorithm
 
-marker = markers.MarkerStyle(marker='s', fillstyle='none')
-iterations = 40
+def alg_01(iterations, groups, colors, Alg_strat):
+    marker = markers.MarkerStyle(marker='s', fillstyle='none')
 
-# colors defined for groups
-groups = 3
-colors = ['red', 'green', 'yellow']
+    Alg_obj = Algorithm('data.txt', Alg_strat)
 
-# flag for break loop after find middle points copy (when middle_points cords are the same, loops break)
-optimized = True
+    points_positions = Alg_obj.data
 
-Alg_obj = Algorithm('data.txt', Euclidean())
+    # dict[int, list[float(x), float(y)]
+    middles_points = Alg_obj.find_random_middle_points(groups)
 
-points_positions = Alg_obj.data
+    # middles_points = Alg_obj.get_defined_middle_points()
 
-middles_groups = Alg_obj.find_random_middle_points(groups)
-print(middles_groups)
+    for i in range(iterations):
 
-# middles_groups = Alg_obj.get_defined_middle_points()
+        # index of point and group which it belongs -> list[tuple[index, group_index]]
+        group_points = Alg_obj.count_distances_and_create_points_groups(points_positions, middles_points)
 
-# memory
-prev_middles = {}
+        if i > 0:
+            # count new positions for middle points
+            middles_points = Alg_obj.count_middle_points_position(middles_points, group_points, points_positions)
 
-x_values, y_values = zip(*points_positions.values())
+        x_middle_values, y_middle_values = zip(*middles_points.values())
 
-for i in range(iterations):
-    group_indexes = []
-    for s, point in enumerate(points_positions.values()):
-        distances = [Alg_obj.count_distance_method_strategy.count_distance(point, middle) for middle in middles_groups.values()]
-        closest_group_idx = np.argmin(distances)
-        group_indexes.append((s, closest_group_idx))
+        x_middle_values = list(x_middle_values)
+        y_middle_values = list(y_middle_values)
 
-    for j, group_point_values in enumerate(middles_groups.values()):
-        temp = []
-        xpos = 0
-        ypos = 0
-        for group in group_indexes:
-            if j == group[1]:
-                temp.append(group[0])
-        if len(temp) == 0:
-            break
-        for el in temp:
-            xpos += points_positions.get(el)[0]
-            ypos += points_positions.get(el)[1]
-        xpos /= len(temp)
-        ypos /= len(temp)
+        group_points_number = {i:0 for i in range(groups)}
+        groups_x_values = {i:[] for i in range(groups)}
+        groups_y_values = {i:[] for i in range(groups)}
 
-        middles_groups.update({j: [xpos, ypos]})
+        # plotting and printing data
+        for s_index, (x, y) in enumerate(points_positions.values()):
+            # choosing group index from group point values [index, group_index] and save it to group_idx
+            group_idx = next(group[1] for group in group_points if group[0] == s_index)
+            group_points_number[group_idx] += 1
 
-    if optimized:
-        if prev_middles.get(0) == middles_groups.get(0) and prev_middles.get(1) == middles_groups.get(
-                1) and prev_middles.get(2) == middles_groups.get(2):
-            break
-        else:
-            prev_middles = middles_groups.copy()
+            groups_x_values.get(group_idx).append(x)
+            groups_y_values.get(group_idx).append(y)
 
-    x_middle_values, y_middle_values = zip(*middles_groups.values())
+            plt.scatter(x, y, color=colors[group_idx], marker=marker)
 
-    x_middle_values = list(x_middle_values)
-    y_middle_values = list(y_middle_values)
+        # iterations
+        if i == 0 or i == 3 or i == 9:
 
-    for s, (x, y) in enumerate(zip(x_values, y_values)):
-        group_idx = next(group[1] for group in group_indexes if group[0] == s)
-        plt.scatter(x, y, color=colors[group_idx], marker=marker)
-
-    # print(i, middles_groups)
-    # plt.scatter(x_values, y_values, marker=marker)
-    plt.scatter(x_middle_values, y_middle_values, marker='o')
-    plt.show()
-
+            print(f'\niterations: {i + 1}\n')
+            for j, point in enumerate(middles_points.values()):
+                print(f'middle point {j+1}: [{round(point[0], 4)}; {round(point[1], 4)}]:'
+                      f' \n-> number of points in group: {j+1}: {group_points_number[j]}',
+                      f' \n-> min values in group {j+1}: (x: {min(groups_x_values.get(j))}, y: {min(groups_y_values.get(j))})'
+                      f' \n-> max values in group {j+1}: (x: {max(groups_x_values.get(j))}, y: {max(groups_y_values.get(j))})\n'
+                      )
+            plt.scatter(x_middle_values, y_middle_values, marker='o', color="black")
+            plt.show()
