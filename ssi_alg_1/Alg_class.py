@@ -100,3 +100,41 @@ class Algorithm:
             middles_points.update({j_index: [x_pos, y_pos]})
         return middles_points
 
+    def return_closest_point_to_middle(self, middles_points, group_points, points_positions):
+        """
+        Method for fining the closest points to counted middles point
+        :param middles_points: dict[int, list[float(x), float(y)]
+        :param group_points: list[tuple[int, int]
+        :param points_positions: dict[int, list[float(x), float(y)]
+        :return:
+        """
+        for j_index, group_point_values in enumerate(middles_points.values()):
+            Xgr = []
+            x_pos = 0
+            y_pos = 0
+            distances = {}
+
+            # adding points to group based on index
+            for group in group_points:
+                if j_index == group[1]:
+                    Xgr.append(group[0])
+            if len(Xgr) == 0:
+                break
+
+            # sum all x,y points values
+            for el in Xgr:
+                x_pos += points_positions.get(el)[0]
+                y_pos += points_positions.get(el)[1]
+
+            # count average values for middle points
+            x_pos /= len(Xgr)
+            y_pos /= len(Xgr)
+
+            for el in Xgr:
+                point_dist = self.count_distance_method_strategy.count_distance([x_pos, y_pos], [points_positions.get(el)[0], points_positions.get(el)[1]], )
+                distances[el] = point_dist
+
+            min_index = min(distances, key=distances.get)
+
+            middles_points.update({j_index: [points_positions.get(min_index)[0], points_positions.get(min_index)[1]]})
+        return middles_points

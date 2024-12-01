@@ -2,8 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.markers as markers
 from Alg_class import Algorithm
 
-
-def main(iterations, groups, colors, Alg_strat):
+def main(iterations, groups, colors, Alg_strat, mode='means'):
     marker = markers.MarkerStyle(marker='s', fillstyle='none')
 
     Alg_obj = Algorithm('data.txt', Alg_strat)
@@ -22,10 +21,12 @@ def main(iterations, groups, colors, Alg_strat):
 
         if i > 0:
             # count new positions for middle points
-            middles_points = Alg_obj.count_middle_points_position(middles_points, group_points, points_positions)
+            if mode == 'means':
+                middles_points = Alg_obj.count_middle_points_position(middles_points, group_points, points_positions)
+            else:
+                middles_points = Alg_obj.return_closest_point_to_middle(middles_points, group_points, points_positions)
 
         x_middle_values, y_middle_values = zip(*middles_points.values())
-
         x_middle_values = list(x_middle_values)
         y_middle_values = list(y_middle_values)
 
