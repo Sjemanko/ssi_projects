@@ -3,7 +3,7 @@ import matplotlib.markers as markers
 from Alg_class import Algorithm
 
 
-def alg_01(iterations, groups, colors, Alg_strat):
+def main(iterations, groups, colors, Alg_strat):
     marker = markers.MarkerStyle(marker='s', fillstyle='none')
 
     Alg_obj = Algorithm('data.txt', Alg_strat)
