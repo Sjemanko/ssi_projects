@@ -23,25 +23,28 @@ def Func(x1, x2):
 
 
 def main(N, r_inercji, r_glob, r_lok, iteracja_liczba, iterations, punkty_startowe=None):
-    if punkty_startowe is None:
-        punkty_startowe = []
+    # ZMIANA - USTAWIENIE PUNKTÓW NA SZTYWNO
+    # if punkty_startowe is None:
+    #     punkty_startowe = []
+    #
+    #     x_glob = []
+    #     x_lok = []
+    #     x_min = 0
+    #     x_max = 100
+    #
+    #     for i in range(N):
+    #         x1 = np.random.uniform(x_min, x_max)
+    #         x2 = np.random.uniform(x_min, x_max)
+    #
+    #         punkty_startowe.append([x1, x2])
+    #         x_glob.append([x1, x2])
+    #         x_lok.append([x1, x2])
+    #         global_static_points.append([x1, x2])
 
-        x_glob = []
-        x_lok = []
-        x_min = 0
-        x_max = 100
-
-        for i in range(N):
-            x1 = np.random.uniform(x_min, x_max)
-            x2 = np.random.uniform(x_min, x_max)
-
-            punkty_startowe.append([x1, x2])
-            x_glob.append([x1, x2])
-            x_lok.append([x1, x2])
-            global_static_points.append([x1, x2])
-    else:
-        x_glob = punkty_startowe.copy()
-        x_lok = punkty_startowe.copy()
+    punkty_startowe=[[58,28], [64, 28], [58, 32], [64, 32]]
+    global_static_points = punkty_startowe.copy()
+    x_glob = punkty_startowe.copy()
+    x_lok = punkty_startowe.copy()
 
     min_x_glob = []
 

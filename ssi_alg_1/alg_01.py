@@ -1,8 +1,14 @@
+# Zmiana importów (inna wersja pycharm oraz bibliotek)
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import matplotlib.markers as markers
 from Alg_class import Algorithm
+from ssi_alg_1.Euclidean import Euclidean
+from ssi_alg_1.DistOfOnlyX2Param import DistOfOnlyX2Param
 
-def main(iterations, groups, colors, Alg_strat, mode='means'):
+
+def main(iterations, groups, colors, Alg_strat, mode="means"):
     marker = markers.MarkerStyle(marker='s', fillstyle='none')
 
     Alg_obj = Algorithm('data.txt', Alg_strat)
@@ -30,12 +36,15 @@ def main(iterations, groups, colors, Alg_strat, mode='means'):
         x_middle_values = list(x_middle_values)
         y_middle_values = list(y_middle_values)
 
-        group_points_number = {i:0 for i in range(groups)}
-        groups_x_values = {i:[] for i in range(groups)}
-        groups_y_values = {i:[] for i in range(groups)}
+        group_points_number = {i: 0 for i in range(groups)}
+        groups_x_values = {i: [] for i in range(groups)}
+        groups_y_values = {i: [] for i in range(groups)}
 
         # plotting and printing data
-        if i == 0 or i == 3 or i == 9:
+        # if i == 0 or i == 3 or i == 9
+
+        # ZMIANA - plotowanie wykresów dla określonych iteracji
+        if i == 3 or i == 7:
             for s_index, (x, y) in enumerate(points_positions.values()):
                 # choosing group index from group point values [index, group_index] and save it to group_idx
                 group_idx = next(group[1] for group in group_points if group[0] == s_index)
@@ -46,13 +55,14 @@ def main(iterations, groups, colors, Alg_strat, mode='means'):
 
                 plt.scatter(x, y, color=colors[group_idx], marker=marker)
 
-        # iterations
+            # iterations
             print(f'\niterations: {i + 1}\n')
             for j, point in enumerate(middles_points.values()):
-                print(f'middle point {j+1}: [{round(point[0], 4)}; {round(point[1], 4)}]:'
-                      f' \n-> number of points in group: {j+1}: {group_points_number[j]}',
-                      f' \n-> min values in group {j+1}: (x: {min(groups_x_values.get(j))}, y: {min(groups_y_values.get(j))})'
-                      f' \n-> max values in group {j+1}: (x: {max(groups_x_values.get(j))}, y: {max(groups_y_values.get(j))})\n'
+                print(f'middle point {j + 1}: [{round(point[0], 4)}; {round(point[1], 4)}]:'
+                      f' \n-> number of points in group: {j + 1}: {group_points_number[j]}',
+                      f' \n-> min values in group {j + 1}: (x: {min(groups_x_values.get(j))}, y: {min(groups_y_values.get(j))})'
+                      f' \n-> max values in group {j + 1}: (x: {max(groups_x_values.get(j))}, y: {max(groups_y_values.get(j))})\n'
                       )
             plt.scatter(x_middle_values, y_middle_values, marker='o', color="black")
             plt.show()
+
